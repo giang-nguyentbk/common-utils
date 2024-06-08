@@ -16,5 +16,6 @@ rootMakefile:
 	@echo "sw/make/Makefile: Compilation $(PROJ_NAME) done!!! [OK]"
 
 clean:
+	@echo
 	@echo "  RMV \t\t $(BIN_DIR)"
 	@$(SELF_RMV) $(BIN_DIR)
