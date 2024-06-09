@@ -16,7 +16,7 @@ create_bin:
 $(BIN)/${TARGET}: $(BIN)/traceIf.o $(BIN)/traceIfTest.o 
 	$(CC) $(CCFLAGS) -o $@ $^
 
-$(BIN)/traceIf.o: $(ROOT_DIR)/sw/trace/src/traceIf.c
+$(BIN)/traceIf.o: $(ROOT_DIR)/sw/traceIf/src/traceIf.c
 	$(CC) -c $(CCFLAGS) -o $@ $(INC_DIR) $(SRC_DIR) $<
 
 $(BIN)/traceIfTest.o: traceIfTest.c
