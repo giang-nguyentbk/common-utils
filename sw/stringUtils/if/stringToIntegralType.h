@@ -35,7 +35,7 @@ std::optional<T> stringToIntegralType(const std::string& str)
 	}
 	const char* last = strCpy.data() + strCpy.size();
 	auto [ptr, err] { std::from_chars(strCpy.data(), last, res)};
-	if(err = std::errc() && ptr == last)
+	if(err == std::errc() && ptr == last)
 	{
 		return res;
 	}
