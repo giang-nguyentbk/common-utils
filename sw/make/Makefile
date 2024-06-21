@@ -7,6 +7,7 @@ include Makefile.config
 # Call Makefiles for modules of the project
 # --------------------------------------------------
 include $(SW_DIR)/traceIf/Makefile
+include $(SW_DIR)/stringUtils/Makefile
 
 
 all: rootMakefile
