@@ -55,6 +55,30 @@ void tracepoint(const char *provider, const char *file, int line, int level, con
 	fflush(stdout);
 }
 
+void tracepoint_cpp(const char *provider, const char *file, int line, int level, const char *str)
+{
+	char msg[SIZE_OF_MSG];
+	strcpy(msg, str);
+
+	char prov_level[SIZE_OF_PROV_LEVEL];
+	get_prov_level(level, prov_level, provider, msg);
+
+	char fileline[SIZE_OF_FILELINE];
+	get_fileline(file, line, fileline);
+
+	char timestamp[SIZE_OF_TIMESTAMP];
+	get_timestamp(timestamp);
+
+	char threadname[SIZE_OF_THREADNAME];
+	get_threadname(threadname);
+
+	char cpuid[SIZE_OF_CPUID];
+	get_cpuid(cpuid);
+
+	fprintf(stdout, "%-30s %-s { %s }, { \"%s\", %s, \"-\", \"%s\" }\n", timestamp, prov_level, cpuid, threadname, fileline, msg);
+	fflush(stdout);
+}
+
 void get_prov_level(int level, char *prov_level, const char *provider, char *msg)
 {
 	switch (level)
