@@ -9,7 +9,7 @@
 #include "traceIf.h"
 
 #define SIZE_OF_MSG		255
-#define SIZE_OF_LEVEL		7
+#define SIZE_OF_PROV_LEVEL	55
 #define SIZE_OF_FILELINE	64
 #define SIZE_OF_TIMESTAMP	50
 #define SIZE_OF_THREADNAME	16 // System limitation, see prctl man page
@@ -22,13 +22,13 @@
 	By the way, using "inline" keyword for these LOG_MACRO_ZZ apparently has no effect! That's interesting as well!
 */
 
-void get_loglevel(int level, char *loglevel, char *msg);
+void get_prov_level(int level, char *prov_level, const char *provider, char *msg);
 void get_fileline(const char *file, int line, char *fileline);
 void get_timestamp(char *timestamp);
 void get_threadname(char *threadname);
 void get_cpuid(char *cpuid);
 
-void tracepoint(const char *file, int line, int level, const char *format, ...)
+void tracepoint(const char *provider, const char *file, int line, int level, const char *format, ...)
 {
 	va_list args;
 	char msg[SIZE_OF_MSG];
@@ -36,8 +36,8 @@ void tracepoint(const char *file, int line, int level, const char *format, ...)
 	vsnprintf(msg, SIZE_OF_MSG, format, args);
 	va_end(args);
 
-	char loglevel[SIZE_OF_LEVEL];
-	get_loglevel(level, loglevel, msg);
+	char prov_level[SIZE_OF_PROV_LEVEL];
+	get_prov_level(level, prov_level, provider, msg);
 
 	char fileline[SIZE_OF_FILELINE];
 	get_fileline(file, line, fileline);
@@ -51,32 +51,32 @@ void tracepoint(const char *file, int line, int level, const char *format, ...)
 	char cpuid[SIZE_OF_CPUID];
 	get_cpuid(cpuid);
 
-	fprintf(stdout, "%-30s %-7s %-11s { \"%s\", %s, \"-\", \"%s\" }\n", timestamp, loglevel, cpuid, threadname, fileline, msg);
+	fprintf(stdout, "%-30s %-s { %s }, { \"%s\", %s, \"-\", \"%s\" }\n", timestamp, prov_level, cpuid, threadname, fileline, msg);
 	fflush(stdout);
 }
 
-void get_loglevel(int level, char *loglevel, char *msg)
+void get_prov_level(int level, char *prov_level, const char *provider, char *msg)
 {
 	switch (level)
 	{
 	case TRACE_INFO:
-		strcpy(loglevel, "INFO:");
+		snprintf(prov_level, SIZE_OF_PROV_LEVEL, "%s:INFO:", provider);
 		break;
 
 	case TRACE_ERROR:
-		strcpy(loglevel, "ERROR:");
+		snprintf(prov_level, SIZE_OF_PROV_LEVEL, "%s:ERROR:", provider);
 		break;
 
 	case TRACE_ABN:
-		strcpy(loglevel, "ABN:");
+		snprintf(prov_level, SIZE_OF_PROV_LEVEL, "%s:ABN:", provider);
 		break;
 
 	case TRACE_DEBUG:
-		strcpy(loglevel, "DEBUG:");
+		snprintf(prov_level, SIZE_OF_PROV_LEVEL, "%s:DEBUG:", provider);
 		break;
 	
 	default:
-		strcpy(loglevel, "ERROR:");
+		snprintf(prov_level, SIZE_OF_PROV_LEVEL, "%s:ERROR:", provider);
 		snprintf(msg, SIZE_OF_MSG, "Invalid trace level = %d, use default ERROR trace to print this msg!", level);
 		break;
 	}
@@ -111,15 +111,9 @@ void get_cpuid(char *cpuid)
 	getcpu(&cpu, NULL);
 	if(cpu != 999)
 	{
-		if(cpu < 10)
-		{
-			sprintf(cpuid, "{ cpu  %d }", cpu);
-		} else
-		{
-			sprintf(cpuid, "{ cpu %d }", cpu);
-		}
+		sprintf(cpuid, "%d", cpu);
 	} else
 	{
-		strcpy(cpuid, "{ - }");
+		strcpy(cpuid, "-");
 	}
 }

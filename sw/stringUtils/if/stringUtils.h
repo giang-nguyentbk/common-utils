@@ -13,6 +13,11 @@
 #include <string>
 #include <charconv>
 
+#include <cstring>
+#include <sstream>
+// #include <initializer_list>
+#include <traceIf>
+
 namespace CommonUtils
 {
 
@@ -42,6 +47,20 @@ std::optional<T> stringToIntegralType(const std::string& str)
 
 	return std::nullopt;
 }
+
+template<typename ... T>
+const char * SSTR(T&& ... args)
+{
+    std::stringstream ss;
+    
+    (void)(ss << ... << std::forward<T>(args));
+    
+    /* Alternative way */
+    // (void)std::initializer_list<bool> {(ss << args)...};
+
+    return ss.str().c_str();
+}
+
 
 } // namespace StringUtils
 

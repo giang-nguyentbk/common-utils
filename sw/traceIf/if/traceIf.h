@@ -25,9 +25,14 @@ extern "C" {
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-void tracepoint(const char *file, int line, int level, const char *format, ...);
+void tracepoint(const char *provider, const char *file, int line, int level, const char *format, ...);
 
-#define TPT_TRACE(level, format, ...) tracepoint(__FILENAME__, __LINE__, (level), (format), ##__VA_ARGS__)
+#ifdef __cplusplus
+#define SSTR_FORMAT		"%s"
+#define TPT_TRACE(level, ...) tracepoint(TPT_PROVIDER, __FILENAME__, __LINE__, (level), SSTR_FORMAT, ##__VA_ARGS__)
+#else
+#define TPT_TRACE(level, format, ...) tracepoint(TPT_PROVIDER, __FILENAME__, __LINE__, (level), (format), ##__VA_ARGS__)
+#endif
 
 #ifdef __cplusplus
 }

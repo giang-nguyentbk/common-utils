@@ -1,8 +1,11 @@
 #include <stdio.h>
-#include "traceIf.h"
 #include <pthread.h>
 #include <sys/prctl.h>
 #include <unistd.h>
+
+#include "mathif.h"
+#include "traceif_ut_tpt_provider.h"
+#include "traceIf.h"
 
 // unsigned long int calc_time_diff(struct timespec t_start, struct timespec t_end)
 // {
@@ -26,6 +29,7 @@ void * test_thread(void *data)
 	// Keep in mind, thread name is never longer than 16 bytes (including NULL-terminated character), this is a kernel limitation.
 	prctl(PR_SET_NAME, "test_thread");
 	TPT_TRACE(TRACE_INFO, "Frequency gain = %.3f", 2.145);
+	(void)mul(5, 2);
 	TPT_TRACE(TRACE_ERROR, "MeasGroup %d not found!", 1);
 
 	sleep(2);
@@ -50,6 +54,7 @@ int main(void)
 	// unsigned long int difftime = calc_time_diff(t_start, t_end);
 	// TPT_TRACE(TPT_INFO, "Time needed for LOG_INFO = %lu (ns) -> %lu (ms)!", difftime, difftime/1000000);
 
+	(void)sub(5, 2);
 	TPT_TRACE(TRACE_ERROR, "Failed to get power boost on port %d", 3);
 
 	pthread_t threadid;
@@ -57,10 +62,16 @@ int main(void)
 
 	sleep(1);
 
+	(void)add(5, 2);
+	
+	
+	
+
 	TPT_TRACE(TRACE_ABN, "DB key /abc/def/ not found, use default value = %d!", 22);
 	TPT_TRACE(TRACE_DEBUG, "This trace used for debugging!");
-	
+	(void)div(5, 2);
 	TPT_TRACE(-1, "This trace used for debugging!");
+	(void)div(5, 0);
 
 	pthread_join(threadid, NULL);
 
