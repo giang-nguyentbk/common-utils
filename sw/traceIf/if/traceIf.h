@@ -26,10 +26,12 @@ extern "C" {
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
 void tracepoint(const char *provider, const char *file, int line, int level, const char *format, ...);
-void tracepoint_cpp(const char *provider, const char *file, int line, int level, const char *str);
 
+
+/* NOTE THAT: TPT_PROVIDER MUST BE #define in each repo/submodule which uses TPT_TRACE */
 #ifdef __cplusplus
-#define TPT_TRACE(level, str) tracepoint_cpp(TPT_PROVIDER, __FILENAME__, __LINE__, (level), (str))
+#define SSTR_FORMAT		"%s"
+#define TPT_TRACE(level, ...) tracepoint(TPT_PROVIDER, __FILENAME__, __LINE__, (level), SSTR_FORMAT, ##__VA_ARGS__)
 #else
 #define TPT_TRACE(level, format, ...) tracepoint(TPT_PROVIDER, __FILENAME__, __LINE__, (level), (format), ##__VA_ARGS__)
 #endif

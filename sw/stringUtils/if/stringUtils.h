@@ -15,6 +15,7 @@
 
 #include <cstring>
 #include <sstream>
+#include <utility>
 // #include <initializer_list>
 #include <traceIf.h>
 
@@ -49,7 +50,7 @@ std::optional<T> stringToIntegralType(const std::string& str)
 }
 
 template<typename ... T>
-const char * SSTR(T&& ... args)
+std::string STR(T&& ... args)
 {
     std::stringstream ss;
     
@@ -58,8 +59,10 @@ const char * SSTR(T&& ... args)
     /* Alternative way */
     // (void)std::initializer_list<bool> {(ss << args)...};
 
-    return ss.str().c_str();
+    return ss.str();
 }
+
+#define SSTR(...) (STR(__VA_ARGS__)).c_str()
 
 
 } // namespace StringUtils
