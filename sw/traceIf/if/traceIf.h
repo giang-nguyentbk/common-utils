@@ -28,7 +28,10 @@ extern "C" {
 void tracepoint(const char *provider, const char *file, int line, int level, const char *format, ...);
 
 
-/* NOTE THAT: TPT_PROVIDER MUST BE #define in each repo/submodule which uses TPT_TRACE */
+/* NOTE THAT:
+	1. TPT_PROVIDER MUST BE #define in each repo/submodule which uses TPT_TRACE
+	2. TPT_PROVIDER CAN ONLY BE INCLUDED into source files that use TPT_TRACE
+*/
 #ifdef __cplusplus
 #define SSTR_FORMAT		"%s"
 #define TPT_TRACE(level, ...) tracepoint(TPT_PROVIDER, __FILENAME__, __LINE__, (level), SSTR_FORMAT, ##__VA_ARGS__)
