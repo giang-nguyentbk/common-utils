@@ -37,8 +37,10 @@ all: install-header-files-stringUtils
 
 install-header-files-stringUtils:
 	@mkdir -p $(INC_DIR)
-	@echo "  CPY \t\t $(STRINGUTILS_DIR)/if"
+	@echo "  COPY \t\t $(STRINGUTILS_DIR)/if"
 	@$(SELF_CPY) $(STRINGUTILS_DIR)/if/*.h $(INC_DIR)
 
 clean-stringUtils:
-	$(SELF_RMV) $(STRINGUTILS_OBJS) $(LIB_DIR)/$(STRINGUTILS_LIBAR) $(LIB_DIR)/$(STRINGUTILS_LIBSO)
+	@echo "  RMV \t\t $(BIN_DIR)/stringUtils"
+#	@$(SELF_RMV) $(STRINGUTILS_OBJS) $(LIB_DIR)/$(STRINGUTILS_LIBAR) $(LIB_DIR)/$(STRINGUTILS_LIBSO)
+	@$(SELF_RMV) $(INC_DIR)/stringUtils.h

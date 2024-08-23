@@ -20,7 +20,7 @@ $(OBJ_DIR)/%.o: $(TRACEIF_SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	@cd $(<D)
 	@echo "  CC \t\t $@"
-	@$(SELF_CC) $^ $(SELF_LDFLAGS) $(SELF_CFLAGS) $(TRACEIF_CXXFLAGS) $(TRACEIF_INCS) -o $@
+	@$(SELF_CC) $(SELF_LDFLAGS) $(SELF_CFLAGS) $(TRACEIF_INCS) $^ -o $@
 
 $(LIB_DIR)/$(TRACEIF_LIBAR): $(TRACEIF_OBJS)
 	@mkdir -p $(@D)
@@ -32,12 +32,14 @@ $(LIB_DIR)/$(TRACEIF_LIBSO): $(TRACEIF_OBJS)
 	@mkdir -p $(@D)
 	@cd $(<D)
 	@echo "  CCLD \t\t $@"
-	@$(SELF_CC) $(SELF_SOFLAGS) -o $@ $^
+	@$(SELF_CC) $(SELF_SOFLAGS) $^ $(TRACEIF_CXXFLAGS) -o $@
 
 install-header-files-traceif:
 	@mkdir -p $(INC_DIR)
-	@echo "  CPY \t\t $(TRACEIF_DIR)/if"
+	@echo "  COPY \t\t $(TRACEIF_DIR)/if"
 	@$(SELF_CPY) $(TRACEIF_DIR)/if/*.h $(INC_DIR)
 
 clean-traceif:
-	$(SELF_RMV) $(TRACEIF_OBJS) $(LIB_DIR)/$(TRACEIF_LIBAR) $(LIB_DIR)/$(TRACEIF_LIBSO)
+	@echo "  RMV \t\t $(BIN_DIR)/traceif"
+	@$(SELF_RMV) $(TRACEIF_OBJS) $(LIB_DIR)/$(TRACEIF_LIBAR) $(LIB_DIR)/$(TRACEIF_LIBSO)
+	@$(SELF_RMV) $(INC_DIR)/traceIf.h
