@@ -21,6 +21,7 @@ namespace V1
 namespace EnumUtils
 {
 
+// No need since C++23
 template<typename E>
 constexpr auto toUnderlyingType(E e) -> typename std::underlying_type<E>::type 
 {
