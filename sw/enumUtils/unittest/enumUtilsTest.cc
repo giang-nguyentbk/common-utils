@@ -17,10 +17,11 @@ class CommandResultCodeEnum : public EnumType<CommandResultCodeEnumRaw>
 {
 public:
 	explicit CommandResultCodeEnum(const CommandResultCodeEnumRaw& raw) : EnumType<CommandResultCodeEnumRaw>(raw) {}
+	explicit CommandResultCodeEnum() : EnumType<CommandResultCodeEnumRaw>(CommandResultCodeEnumRaw::UNDEF) {}
 
 	std::string toString() const override
 	{
-		switch (getValue())
+		switch (getRawEnum())
 		{
 		case CommandResultCodeEnumRaw::CMD_ERROR:
 			return "CMD_ERROR";
@@ -31,8 +32,11 @@ public:
 		case CommandResultCodeEnumRaw::CMD_SUCCESS:
 			return "CMD_SUCCESS";
 
+		case CommandResultCodeEnumRaw::UNDEF:
+			return "UNDEF";
+
 		default:
-			return "Unknown EnumType: " + toS32();
+			return "Unknown EnumType: " + std::to_string(toS32());
 		}
 	}
 
@@ -86,6 +90,12 @@ int main()
 
 	cmdResult = CommandResultCodeEnum(CommandResultCodeEnumRaw::CMD_INVALID_ARGUMENTS);
 	std::cout << "cmdResult.move_assignment: " << cmdResult.toString() << std::endl;
+
+	CommandResultCodeEnum testDefaultCons;
+	std::cout << "testDefaultCons: " << testDefaultCons.toString() << std::endl;
+
+	testDefaultCons.set(CommandResultCodeEnumRaw::CMD_SUCCESS);
+	std::cout << "testDefaultCons: " << testDefaultCons.toString() << std::endl;
 
 	return 0;
 }

@@ -52,9 +52,14 @@ public:
 		return m_value;
 	}
 
-	T getValue() const
+	T getRawEnum() const
 	{
 		return m_value;
+	}
+
+	void set(const T& newValue)
+	{
+		m_value = newValue;
 	}
 
 	int32_t toS32() const
