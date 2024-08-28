@@ -8,6 +8,7 @@ include Makefile.config
 # --------------------------------------------------
 include $(SW_DIR)/traceIf/Makefile
 include $(SW_DIR)/stringUtils/Makefile
+include $(SW_DIR)/enumUtils/Makefile
 
 
 all: rootMakefile
